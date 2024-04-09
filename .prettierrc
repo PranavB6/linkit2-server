@@ -1,0 +1,13 @@
+# Prettier Options Docs: https://prettier.io/docs/en/options
+
+# print trailing commas wherever possible in multi-line comma-separated syntactic structures
+trailingComma: "all"
+
+# the number of spaces per indentation-level
+tabWidth: 2
+
+# add a semicolon at the end of every statement
+semi: true
+
+# prefer using double quotes instead of single quotes
+singleQuote: false

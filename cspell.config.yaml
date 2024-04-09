@@ -1,0 +1,44 @@
+version: "0.2"
+ignorePaths: []
+dictionaryDefinitions: []
+dictionaries:
+  - python
+words:
+  - Bodawala
+  - devcontainer
+  - devcontainers
+  - Pranav
+ignoreWords:
+  - anson
+  - autodocstring
+  - celerybeat
+  - charliermarsh
+  - connor
+  - cython
+  - dmypy
+  - elagil
+  - errorlens
+  - esbenp
+  - htmlcov
+  - ipynb
+  - ipython
+  - mkdocs
+  - njpwerner
+  - nosetests
+  - pybuilder
+  - pyflow
+  - pypa
+  - pypackages
+  - pytype
+  - ropeproject
+  - spyder
+  - spyderproject
+  - spyproject
+  - tamasfe
+  - usernamehw
+  - vivaxy
+  - webassets
+  - yzhang
+import: []
+language: en
+enabled: true
