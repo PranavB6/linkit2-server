@@ -10,4 +10,4 @@ class TestLinkitConfig:
     def test_env(self):
         config = get_linkit_config()
 
-        assert config.env == LinkitEnvironment.TEST
+        assert config.environment == LinkitEnvironment.TEST

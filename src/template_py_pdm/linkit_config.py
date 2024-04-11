@@ -11,7 +11,9 @@ class LinkitEnvironment(str, Enum):
 
 
 class Settings(BaseSettings):
-    env: LinkitEnvironment = Field(validation_alias="Linkit_Environment", default=None)
+    environment: LinkitEnvironment = Field(
+        default=None, validation_alias="Linkit_Environment"
+    )
 
 
 def get_linkit_config():
