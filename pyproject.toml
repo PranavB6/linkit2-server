@@ -3,7 +3,11 @@ name = "template-py-pdm"
 version = "0.1.0"
 description = "Default template for PDM package"
 authors = [{ name = "Pranav Bodawala", email = "b.pranav.k@gmail.com" }]
-dependencies = ["pydantic-settings>=2.2.1", "pydantic>=2.6.4"]
+dependencies = [
+    "pydantic-settings>=2.2.1",
+    "pydantic>=2.6.4",
+    "pymongo[srv]>=4.6.3",
+]
 requires-python = ">=3.12"
 readme = "README.md"
 license = { text = "MIT" }

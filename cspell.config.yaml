@@ -5,11 +5,13 @@ dictionaries:
   - python
 words:
   - Bodawala
+  - bson
   - devcontainer
   - devcontainers
   - linkit
   - Pranav
   - pydantic
+  - pymongo
   - sessionstart
 ignoreWords:
   - anson
