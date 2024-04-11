@@ -28,6 +28,9 @@ class Settings(BaseSettings):
 
 
 def get_linkit_config():
+    # Initialize sub classes here
+    # So that environment variables are read when in this function is called
+    # Otherwise, the environment variables are read when the module is imported
     mongodb_config = MongoDBConfig()
     config = Settings(mongodb=mongodb_config)
 
