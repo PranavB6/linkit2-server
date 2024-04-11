@@ -1,5 +1,5 @@
 {
-  "python.analysis.typeCheckingMode": "standard",
+  "python.analysis.typeCheckingMode": "strict",
   "[python]": {
     // configure Ruff to format, fix, and organize imports on-save
     "editor.formatOnSave": true,
@@ -8,5 +8,8 @@
       "source.organizeImports": "explicit"
     },
     "editor.defaultFormatter": "charliermarsh.ruff"
-  }
+  },
+  "python.testing.pytestArgs": ["tests"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true
 }
