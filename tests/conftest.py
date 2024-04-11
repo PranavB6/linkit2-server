@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from src.template_py_pdm.linkit_config import LinkitEnvironment, get_linkit_config
+from src.linkit2.linkit_config import LinkitEnvironment, get_linkit_config
 
 
 def pytest_sessionstart(session: pytest.Session):
