@@ -1,7 +1,8 @@
 from typing import Optional
 
-from linkit2.models.py_object_id import PyObjectId
 from pydantic import BaseModel, Field
+
+from linkit2.models.py_object_id import PyObjectId
 
 
 class LinkRecord(BaseModel):

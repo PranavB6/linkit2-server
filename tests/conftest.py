@@ -2,8 +2,8 @@ import os
 
 import pytest
 
-from src.linkit2.linkit_config import LinkitEnvironment, get_linkit_config
-from src.linkit2.linkit_logging.linkit_logger import setup_logging
+from linkit2.linkit_config import LinkitEnvironment, get_linkit_config
+from linkit2.linkit_logging.linkit_logger import setup_logging
 
 
 def pytest_sessionstart(session: pytest.Session):

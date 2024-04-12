@@ -1,10 +1,10 @@
 import bson.errors
 import pytest
 from bson.objectid import ObjectId
-from linkit2.models.link_record import LinkRecord
 
-from src.linkit2.linkit_config import get_linkit_config
-from src.linkit2.mongodb import MongoDB
+from linkit2.linkit_config import get_linkit_config
+from linkit2.models.link_record import LinkRecord
+from linkit2.mongodb import MongoDB
 
 
 def setup_mongodb():
