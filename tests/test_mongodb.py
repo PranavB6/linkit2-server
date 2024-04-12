@@ -29,13 +29,13 @@ class TestMongoDB:
 
     def test_insert_link_record(self):
         mongodb = setup_mongodb()
-        link_record = LinkRecord(url="https://www.google.com")
+        link_record = LinkRecord(originalUrl="https://www.google.com")
         inserted_id = mongodb.insert_link_record(link_record)
         assert inserted_id is not None
 
     def test_delete_database(self):
         mongodb = setup_mongodb()
-        link_record = LinkRecord(url="https://www.google.com")
+        link_record = LinkRecord(originalUrl="https://www.google.com")
         mongodb.insert_link_record(link_record)
 
         mongodb.delete_database()
@@ -47,11 +47,11 @@ class TestMongoDB:
 
     def test_get_link_record_by_id(self):
         mongodb = setup_mongodb()
-        link_record = LinkRecord(url="https://pranav.com")
+        link_record = LinkRecord(originalUrl="https://pranav.com")
         inserted_id = mongodb.insert_link_record(link_record)
 
         record = mongodb.get_link_record_by_id(inserted_id)
 
         assert record is not None
-        assert record.url == "https://pranav.com"
+        assert record.originalUrl == "https://pranav.com"
         assert record.id == inserted_id

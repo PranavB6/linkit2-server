@@ -16,7 +16,9 @@ def main():
     mongodb = MongoDB(config.mongodb)
     mongodb.test_connection()
 
-    inserted = mongodb.insert_link_record(LinkRecord(url="https://www.google.com"))
+    inserted = mongodb.insert_link_record(
+        LinkRecord(originalUrl="https://www.google.com")
+    )
 
     print(f"Inserted: {inserted}")
 

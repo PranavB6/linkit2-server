@@ -1,15 +1,14 @@
-from typing import Annotated, Optional
+from typing import Optional
 
-from pydantic import BaseModel, BeforeValidator, Field
-
-PyObjectId = Annotated[str, BeforeValidator(str)]
+from linkit2.models.py_object_id import PyObjectId
+from pydantic import BaseModel, Field
 
 
 class LinkRecord(BaseModel):
     id: Optional[PyObjectId] = Field(alias="_id", default=None)
-    url: str = Field(default=None)
+    originalUrl: str = Field(default=None)
 
 
 class LinkRecordInMongoDB(BaseModel):
     id: PyObjectId = Field(alias="_id", default=None)
-    url: str = Field(default=None)
+    originalUrl: str = Field(default=None)
