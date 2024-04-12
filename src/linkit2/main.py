@@ -1,10 +1,17 @@
 from linkit2.linkit_config import get_linkit_config
+from linkit2.linkit_logging.linkit_logger import get_linkit_logger, setup_logging
 from linkit2.models.link_record import LinkRecord
 from linkit2.mongodb import MongoDB
+
+logger = get_linkit_logger()
 
 
 def main():
     print("Hello World!")
+    setup_logging()
+
+    logger.info("Starting Linkit2")
+
     config = get_linkit_config()
     mongodb = MongoDB(config.mongodb)
     mongodb.test_connection()

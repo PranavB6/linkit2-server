@@ -5,7 +5,10 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
 from linkit2.linkit_config import MongoDBConfig
+from linkit2.linkit_logging.linkit_logger import get_mongodb_logger
 from linkit2.models.link_record import LinkRecord, LinkRecordInMongoDB
+
+logger = get_mongodb_logger()
 
 
 class MongoDB:
@@ -25,9 +28,9 @@ class MongoDB:
 
         try:
             client.admin.command("ping")
-            print("Successfully connected to MongoDB!")
-        except Exception as e:
-            print(e)
+            logger.info("Successfully connected to MongoDB!")
+        except Exception:
+            logger.exception("Failed to connect to MongoDB!")
 
         return client
 

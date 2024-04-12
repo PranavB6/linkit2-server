@@ -4,10 +4,13 @@ dictionaryDefinitions: []
 dictionaries:
   - python
 words:
+  - asctime
   - Bodawala
   - bson
+  - datefmt
   - devcontainer
   - devcontainers
+  - levelname
   - linkit
   - Pranav
   - pydantic
