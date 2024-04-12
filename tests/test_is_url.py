@@ -1,4 +1,4 @@
-from linkit2.linkit_logging.utils import is_url
+from linkit2.utils import is_url
 
 
 class TestIsUrl:
