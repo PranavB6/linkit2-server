@@ -11,6 +11,7 @@ def setup_mongodb():
     return mongodb
 
 
+@pytest.mark.mongodb
 class TestMongoDB:
     def setup_method(self, test_method: pytest.Function):
         mongodb = setup_mongodb()
