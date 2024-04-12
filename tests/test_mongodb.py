@@ -1,4 +1,6 @@
+import bson.errors
 import pytest
+from bson.objectid import ObjectId
 from linkit2.models.link_record import LinkRecord
 
 from src.linkit2.linkit_config import get_linkit_config
@@ -56,3 +58,35 @@ class TestMongoDB:
         assert record is not None
         assert record.originalUrl == "https://pranav.com"
         assert record.id == inserted_id
+
+    def test_get_link_record_by_id_with_invalid_id(self):
+        mongodb = setup_mongodb()
+        with pytest.raises(bson.errors.InvalidId):
+            mongodb.get_link_record_by_id("invalid_id")
+
+    def test_get_link_record_by_id_with_non_existent_id(self):
+        mongodb = setup_mongodb()
+        random_object_id = str(ObjectId())
+        record = mongodb.get_link_record_by_id(random_object_id)
+        assert record is None
+
+    def test_get_link_records_with_3_records(self):
+        mongodb = setup_mongodb()
+        link_record1 = LinkRecord(originalUrl="https://pranav.com")
+        link_record2 = LinkRecord(originalUrl="https://google.com")
+        link_record3 = LinkRecord(originalUrl="https://facebook.com")
+
+        mongodb.insert_link_record(link_record1)
+        mongodb.insert_link_record(link_record2)
+        mongodb.insert_link_record(link_record3)
+
+        records = mongodb.get_all_link_records()
+
+        assert records is not None
+        assert len(list(records)) == 3
+        assert set([record.originalUrl for record in records]) == set(
+            [
+                record.originalUrl
+                for record in [link_record1, link_record2, link_record3]
+            ]
+        )

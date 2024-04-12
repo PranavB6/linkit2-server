@@ -26,6 +26,9 @@ dev = "python src/linkit2/main.py"
 test = "pytest"
 "test:unit" = "pytest -m 'not mongodb'"
 "test:integration" = "pytest -m mongodb"
+# focus on specific tests for debugging
+# inspired by mocha
+"test:only" = "pytest -m only"
 
 [tool.pdm.dev-dependencies]
 dev = ["pytest>=8.1.1"]
