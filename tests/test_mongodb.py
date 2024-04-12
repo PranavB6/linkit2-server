@@ -32,13 +32,13 @@ class TestMongoDB:
 
     def test_insert_link_record(self):
         mongodb = setup_mongodb()
-        link_record = LinkRecord(originalUrl="https://www.google.com")
+        link_record = LinkRecord(original_url="https://www.google.com")
         inserted_id = mongodb.insert_link_record(link_record)
         assert inserted_id is not None
 
     def test_delete_database(self):
         mongodb = setup_mongodb()
-        link_record = LinkRecord(originalUrl="https://www.google.com")
+        link_record = LinkRecord(original_url="https://www.google.com")
         mongodb.insert_link_record(link_record)
 
         mongodb.delete_database()
@@ -50,13 +50,13 @@ class TestMongoDB:
 
     def test_get_link_record_by_id(self):
         mongodb = setup_mongodb()
-        link_record = LinkRecord(originalUrl="https://pranav.com")
+        link_record = LinkRecord(original_url="https://pranav.com")
         inserted_id = mongodb.insert_link_record(link_record)
 
         record = mongodb.get_link_record_by_id(inserted_id)
 
         assert record is not None
-        assert record.originalUrl == "https://pranav.com"
+        assert record.original_url == "https://pranav.com"
         assert record.id == inserted_id
 
     def test_get_link_record_by_id_with_invalid_id(self):
@@ -72,9 +72,9 @@ class TestMongoDB:
 
     def test_get_link_records_with_3_records(self):
         mongodb = setup_mongodb()
-        link_record1 = LinkRecord(originalUrl="https://pranav.com")
-        link_record2 = LinkRecord(originalUrl="https://google.com")
-        link_record3 = LinkRecord(originalUrl="https://facebook.com")
+        link_record1 = LinkRecord(original_url="https://pranav.com")
+        link_record2 = LinkRecord(original_url="https://google.com")
+        link_record3 = LinkRecord(original_url="https://facebook.com")
 
         mongodb.insert_link_record(link_record1)
         mongodb.insert_link_record(link_record2)
@@ -84,9 +84,9 @@ class TestMongoDB:
 
         assert records is not None
         assert len(list(records)) == 3
-        assert set([record.originalUrl for record in records]) == set(
+        assert set([record.original_url for record in records]) == set(
             [
-                record.originalUrl
+                record.original_url
                 for record in [link_record1, link_record2, link_record3]
             ]
         )
