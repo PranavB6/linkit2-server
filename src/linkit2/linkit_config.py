@@ -24,14 +24,10 @@ class Settings(BaseSettings):
     environment: LinkitEnvironment = Field(
         default=None, validation_alias="LINKIT_ENVIRONMENT"
     )
-    mongodb: MongoDBConfig
+    mongodb: MongoDBConfig = Field(default_factory=MongoDBConfig)
 
 
 def get_linkit_config():
-    # Initialize sub classes here
-    # So that environment variables are read when in this function is called
-    # Otherwise, the environment variables are read when the module is imported
-    mongodb_config = MongoDBConfig()
-    config = Settings(mongodb=mongodb_config)
+    config = Settings()
 
     return config
