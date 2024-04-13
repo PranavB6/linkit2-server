@@ -24,7 +24,7 @@ distribution = true
 [tool.pdm.scripts]
 _.env_file = ".env"
 dev = "python src/linkit2/main.py"
-test = "pytest"
+test = { composite = ["test:unit", "test:integration"] }
 "test:unit" = "pytest -m 'not mongodb'"
 "test:integration" = "pytest -m mongodb"
 # focus on specific tests for debugging
