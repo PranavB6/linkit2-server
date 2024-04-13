@@ -16,7 +16,9 @@ class MongoDB:
         self.mongodb_config = mongodb_config
         self.client = self._connect()
         self.links_database = self.client[mongodb_config.database_name]
-        self.links_collection = self.links_database[mongodb_config.collection_name]
+        self.links_collection = self.links_database[
+            mongodb_config.links_collection_name
+        ]
 
     def _connect(self):
         server_api = ServerApi("1", deprecation_errors=True)
