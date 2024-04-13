@@ -22,7 +22,7 @@ def main():
 
     print(f"Inserted: {inserted}")
 
-    records = mongodb.get_all_link_records()
+    records = mongodb.get_all_link_statistics_records()
 
     for record in records:
         print(mongodb.get_link_record_by_id(record.id))

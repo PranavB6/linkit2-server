@@ -22,7 +22,7 @@ class TestLinkRecord:
         link_record = LinkRecord(**link_record_dict)
 
         assert link_record is not None
-        assert link_record.original_url == link_record_dict["original_url"]
+        assert link_record.model_dump() == link_record_dict
 
     @pytest.mark.parametrize(
         "link_record_dict",
@@ -60,7 +60,9 @@ class TestLinkRecordInMongoDB:
 
         assert link_record is not None
 
-        assert link_record.id == str(link_record_dict["_id"])
+        expected = link_record_dict.copy()
+        expected["id"] = str(expected.pop("_id"))
+        assert link_record.model_dump() == expected
 
     @pytest.mark.parametrize(
         "link_record_dict",

@@ -7,6 +7,7 @@ from pymongo.server_api import ServerApi
 from linkit2.linkit_config import MongoDBConfig
 from linkit2.linkit_logging.linkit_logger import get_mongodb_logger
 from linkit2.models.link_record import LinkRecord, LinkRecordInMongoDB
+from linkit2.models.link_statistics_record import LinkStatisticsRecord
 
 logger = get_mongodb_logger()
 
@@ -15,9 +16,10 @@ class MongoDB:
     def __init__(self, mongodb_config: MongoDBConfig) -> None:
         self.mongodb_config = mongodb_config
         self.client = self._connect()
-        self.links_database = self.client[mongodb_config.database_name]
-        self.links_collection = self.links_database[
-            mongodb_config.links_collection_name
+        self.database = self.client[mongodb_config.database_name]
+        self.links_collection = self.database[mongodb_config.links_collection_name]
+        self.link_statistics_collection = self.database[
+            mongodb_config.link_statistics_collection_name
         ]
 
     def _connect(self):
@@ -56,11 +58,20 @@ class MongoDB:
         return LinkRecordInMongoDB(**record)
 
     def insert_link_record(self, record: LinkRecord) -> str:
-        inserted = self.links_collection.insert_one(
-            record.model_dump(by_alias=True, exclude=set(["id"]))
-        )
+        inserted = self.links_collection.insert_one(record.model_dump())
+
+        return str(inserted.inserted_id)
+
+    def get_all_link_statistics_records(self) -> list[LinkStatisticsRecord]:
+        raw_records = list(self.link_statistics_collection.find())
+        records = [LinkStatisticsRecord(**record) for record in raw_records]
+
+        return records
+
+    def insert_link_statistics_record(self, record: LinkStatisticsRecord) -> str:
+        inserted = self.link_statistics_collection.insert_one(record.model_dump())
 
         return str(inserted.inserted_id)
 
     def delete_database(self):
-        self.client.drop_database(self.links_database.name)
+        self.client.drop_database(self.database.name)
