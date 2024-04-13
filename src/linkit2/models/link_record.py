@@ -1,15 +1,21 @@
-from typing import Optional
+from typing import Annotated
 
-from pydantic import BaseModel, Field
+from pydantic import AfterValidator, BaseModel, Field
 
 from linkit2.models.py_object_id import PyObjectId
 
 
+def is_non_empty_string(value: str) -> str:
+    assert len(value.strip()) > 0, f"'{value}' must be a non-empty string"
+    return value
+
+
+NonEmptyString = Annotated[str, AfterValidator(is_non_empty_string)]
+
+
 class LinkRecord(BaseModel):
-    id: Optional[PyObjectId] = Field(alias="_id", default=None)
-    original_url: str = Field(default=None)
+    original_url: NonEmptyString
 
 
-class LinkRecordInMongoDB(BaseModel):
-    id: PyObjectId = Field(alias="_id", default=None)
-    original_url: str = Field(default=None)
+class LinkRecordInMongoDB(LinkRecord):
+    id: PyObjectId = Field(alias="_id")
