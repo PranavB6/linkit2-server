@@ -12,11 +12,22 @@ class LinkitEnvironment(str, Enum):
 
 class MongoDBConfig(BaseSettings):
     connection_string: str = Field(
-        default=None, validation_alias="MONGODB_CONNECTION_STRING"
+        validation_alias="MONGODB_CONNECTION_STRING",
+        default=None,
+        validate_default=True,
     )
-    database_name: str = Field(default=None, validation_alias="MONGODB_DATABASE_NAME")
-    collection_name: str = Field(
-        default=None, validation_alias="MONGODB_COLLECTION_NAME"
+    database_name: str = Field(
+        validation_alias="MONGODB_DATABASE_NAME", default=None, validate_default=True
+    )
+    links_collection_name: str = Field(
+        validation_alias="MONGODB_LINKS_COLLECTION_NAME",
+        default=None,
+        validate_default=True,
+    )
+    link_statistics_collection_name: str = Field(
+        validation_alias="MONGODB_LINK_STATISTICS_COLLECTION_NAME",
+        default=None,
+        validate_default=True,
     )
 
 
