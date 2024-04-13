@@ -45,13 +45,13 @@ class MongoDB:
 
         return records
 
-    def get_link_record_by_id(self, id: str) -> Optional[LinkRecord]:
+    def get_link_record_by_id(self, id: str) -> Optional[LinkRecordInMongoDB]:
         record = self.links_collection.find_one({"_id": ObjectId(id)})
 
         if record is None:
             return None
 
-        return LinkRecord(**record)
+        return LinkRecordInMongoDB(**record)
 
     def insert_link_record(self, record: LinkRecord) -> str:
         inserted = self.links_collection.insert_one(
