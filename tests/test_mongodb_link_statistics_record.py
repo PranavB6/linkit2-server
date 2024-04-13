@@ -15,6 +15,23 @@ def setup_mongodb():
     return mongodb
 
 
+def create_link_statistics_record():
+    return LinkStatisticsRecord(
+        **{
+            "link_record_id": ObjectId(),
+            "created_at": datetime.now(),
+            "access": {
+                "last_accessed_at": datetime.now(),
+                "access_count": 0,
+            },
+            "expiry": {
+                "expires_at": datetime.now(),
+                "max_access_count": 0,
+            },
+        }  # type: ignore
+    )
+
+
 @pytest.mark.mongodb
 class TestMongoDB:
     def setup_method(self, test_method: pytest.Function):
@@ -30,20 +47,7 @@ class TestMongoDB:
 
     def test_insert_link_statistics_record(self):
         mongodb = setup_mongodb()
-        link_statistics_record = LinkStatisticsRecord(
-            **{
-                "link_record_id": ObjectId(),
-                "created_at": datetime.now(),
-                "access": {
-                    "last_accessed_at": datetime.now(),
-                    "access_count": 0,
-                },
-                "expiry": {
-                    "expires_at": datetime.now(),
-                    "max_access_count": 0,
-                },
-            }  # type: ignore
-        )
+        link_statistics_record = create_link_statistics_record()
 
         inserted_id = mongodb.insert_link_statistics_record(link_statistics_record)
 
@@ -51,25 +55,9 @@ class TestMongoDB:
 
     def test_get_link_statistic_record_by_id(self):
         mongodb = setup_mongodb()
-        link_statistics_record = LinkStatisticsRecord(
-            **{
-                "link_record_id": ObjectId(),
-                "created_at": datetime.now(),
-                "access": {
-                    "last_accessed_at": datetime.now(),
-                    "access_count": 0,
-                },
-                "expiry": {
-                    "expires_at": datetime.now(),
-                    "max_access_count": 0,
-                },
-            }  # type: ignore
-        )
+        link_statistics_record = create_link_statistics_record()
 
         inserted_id = mongodb.insert_link_statistics_record(link_statistics_record)
-
-        assert inserted_id is not None
-
         record = mongodb.get_link_statistics_record_by_id(inserted_id)
 
         assert record is not None
