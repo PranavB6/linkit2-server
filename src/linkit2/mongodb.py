@@ -83,7 +83,9 @@ class MongoDB:
         return LinkStatisticsRecord(**record)
 
     def insert_link_statistics_record(self, record: LinkStatisticsRecord) -> str:
-        inserted = self.link_statistics_collection.insert_one(record.model_dump())
+        record_dict = record.model_dump()
+        record_dict["link_record_id"] = ObjectId(record.link_record_id)
+        inserted = self.link_statistics_collection.insert_one(record_dict)
 
         return str(inserted.inserted_id)
 
