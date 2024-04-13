@@ -48,3 +48,29 @@ class TestMongoDB:
         inserted_id = mongodb.insert_link_statistics_record(link_statistics_record)
 
         assert inserted_id is not None
+
+    def test_get_link_statistic_record_by_id(self):
+        mongodb = setup_mongodb()
+        link_statistics_record = LinkStatisticsRecord(
+            **{
+                "link_record_id": ObjectId(),
+                "created_at": datetime.now(),
+                "access": {
+                    "last_accessed_at": datetime.now(),
+                    "access_count": 0,
+                },
+                "expiry": {
+                    "expires_at": datetime.now(),
+                    "max_access_count": 0,
+                },
+            }  # type: ignore
+        )
+
+        inserted_id = mongodb.insert_link_statistics_record(link_statistics_record)
+
+        assert inserted_id is not None
+
+        record = mongodb.get_link_statistics_record_by_id(inserted_id)
+
+        assert record is not None
+        assert record.link_record_id == str(link_statistics_record.link_record_id)

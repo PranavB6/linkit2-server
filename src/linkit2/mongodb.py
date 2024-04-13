@@ -43,6 +43,8 @@ class MongoDB:
         assert response is not None
         assert response["ok"] == 1
 
+    # --- Link Records ---
+
     def get_all_link_records(self) -> list[LinkRecordInMongoDB]:
         raw_records = list(self.links_collection.find())
         records = [LinkRecordInMongoDB(**record) for record in raw_records]
@@ -62,11 +64,23 @@ class MongoDB:
 
         return str(inserted.inserted_id)
 
+    # --- Link Statistics Records ---
+
     def get_all_link_statistics_records(self) -> list[LinkStatisticsRecord]:
         raw_records = list(self.link_statistics_collection.find())
         records = [LinkStatisticsRecord(**record) for record in raw_records]
 
         return records
+
+    def get_link_statistics_record_by_id(
+        self, id: str
+    ) -> Optional[LinkStatisticsRecord]:
+        record = self.link_statistics_collection.find_one({"_id": ObjectId(id)})
+
+        if record is None:
+            return None
+
+        return LinkStatisticsRecord(**record)
 
     def insert_link_statistics_record(self, record: LinkStatisticsRecord) -> str:
         inserted = self.link_statistics_collection.insert_one(record.model_dump())
