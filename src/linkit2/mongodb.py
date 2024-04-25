@@ -13,7 +13,16 @@ logger = get_mongodb_logger()
 
 
 class MongoDB:
-    def __init__(self, mongodb_config: MongoDBConfig) -> None:
+    _instance = None
+
+    def __new__(cls, mongodb_config: MongoDBConfig):
+        if cls._instance is None:
+            cls._instance = super(MongoDB, cls).__new__(cls)
+            cls._initialize(cls._instance, mongodb_config)
+
+        return cls._instance
+
+    def _initialize(self, mongodb_config: MongoDBConfig) -> None:
         self.mongodb_config = mongodb_config
         self.client = self._connect()
         self.database = self.client[mongodb_config.database_name]
