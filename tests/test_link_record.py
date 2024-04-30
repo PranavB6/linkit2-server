@@ -4,6 +4,7 @@ from typing import Any
 import pytest
 from pydantic import ValidationError
 
+from linkit2.link_record_builder import LinkRecordBuilder
 from linkit2.models.link_record import LinkRecord
 from linkit2.utils import deep_merge
 
@@ -30,6 +31,11 @@ class TestLinkRecord:
     def test_create_link_record_with_empty_dict(self):
         with pytest.raises(ValidationError):
             LinkRecord.model_validate({})
+
+    def test_create_link_record_with_link_record_builder(self):
+        link_record = LinkRecordBuilder().build()
+
+        assert link_record is not None
 
     @pytest.mark.parametrize(
         "link_record_partial_dict",
