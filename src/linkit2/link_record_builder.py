@@ -11,6 +11,7 @@ class LinkRecordBuilder:
     def __init__(self):
         self.link_record_dict = {
             "original_url": fake.url(),
+            "slug": fake.pystr(min_chars=5, max_chars=10),
             "created_at": datetime.datetime.now(datetime.timezone.utc).replace(
                 microsecond=0
             ),

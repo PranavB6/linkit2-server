@@ -28,6 +28,7 @@ class LinkRecord(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     original_url: NonEmptyString
+    slug: NonEmptyString
     created_at: datetime.datetime
     access: LinkRecordAccess
     expiry: LinkRecordExpiry

@@ -15,6 +15,7 @@ words:
   - Pranav
   - pydantic
   - pymongo
+  - pystr
   - sessionstart
 ignoreWords:
   - anson

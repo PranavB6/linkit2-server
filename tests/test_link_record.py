@@ -10,6 +10,7 @@ from linkit2.utils import deep_merge
 
 valid_link_record_dict = {
     "original_url": "https://www.google.com",
+    "slug": "abcde",
     "created_at": datetime.datetime.now(),
     "access": {
         "last_accessed_at": datetime.datetime.now(),
@@ -61,6 +62,8 @@ class TestLinkRecord:
                 "original_url": None,
                 "created_at": None,
             },
+            {"slug": None},
+            {"slug": ""},
         ],
     )
     def test_invalid_link_record(self, link_record_partial_dict: dict[str, Any]):
