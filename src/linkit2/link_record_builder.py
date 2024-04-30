@@ -11,13 +11,19 @@ class LinkRecordBuilder:
     def __init__(self):
         self.link_record_dict = {
             "original_url": fake.url(),
-            "created_at": datetime.datetime.now(datetime.timezone.utc),
+            "created_at": datetime.datetime.now(datetime.timezone.utc).replace(
+                microsecond=0
+            ),
             "access": {
-                "last_accessed_at": fake.future_datetime(tzinfo=datetime.timezone.utc),
+                "last_accessed_at": fake.future_datetime(
+                    tzinfo=datetime.timezone.utc
+                ).replace(microsecond=0),
                 "access_count": fake.random_int(),
             },
             "expiry": {
-                "expires_at": fake.future_datetime(tzinfo=datetime.timezone.utc),
+                "expires_at": fake.future_datetime(
+                    tzinfo=datetime.timezone.utc
+                ).replace(microsecond=0),
                 "max_access_count": fake.random_int(),
             },
         }

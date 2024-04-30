@@ -1,7 +1,9 @@
 import datetime
 from typing import Annotated
 
-from pydantic import AfterValidator, BaseModel, ConfigDict
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field
+
+from linkit2.models.py_object_id import PyObjectId
 
 
 def is_non_empty_string(value: str) -> str:
@@ -29,3 +31,15 @@ class LinkRecord(BaseModel):
     created_at: datetime.datetime
     access: LinkRecordAccess
     expiry: LinkRecordExpiry
+
+    def __eq__(self, value: object) -> bool:
+        if isinstance(value, LinkRecord):
+            return self.model_dump(exclude=set(["id"])) == value.model_dump(
+                exclude=set(["id"])
+            )
+
+        return super().__eq__(value)
+
+
+class LinkRecordInMongoDB(LinkRecord):
+    id: PyObjectId = Field(alias="_id")
