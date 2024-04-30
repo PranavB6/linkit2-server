@@ -50,8 +50,20 @@ class TestMongoDB:
 
         assert link_record_mongodb is None
 
-    # def test_find_link_record_with_original_url_with_empty_db(self):
-    #     pass
+    def test_find_link_record_with_slug(self):
+        link_record = LinkRecordBuilder().build()
+        inserted_id = self.mongodb.insert_link_record(link_record)
+
+        link_record_mongodb = self.mongodb.find_link_record_with_slug(link_record.slug)
+
+        assert link_record_mongodb is not None
+        assert link_record == link_record_mongodb
+        assert inserted_id == link_record_mongodb.id
+
+    def test_find_link_record_with_slug_with_empty_db(self):
+        link_record_mongodb = self.mongodb.find_link_record_with_slug("random_slug")
+
+        assert link_record_mongodb is None
 
     # def test_delete_link_record(self):
     #     pass

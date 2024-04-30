@@ -67,5 +67,13 @@ class MongoDB:
 
         return LinkRecordInMongoDB.model_validate(raw_record)
 
+    def find_link_record_with_slug(self, slug: str) -> Optional[LinkRecordInMongoDB]:
+        raw_record = self.collection.find_one({"slug": slug})
+
+        if raw_record is None:
+            return None
+
+        return LinkRecordInMongoDB.model_validate(raw_record)
+
     def delete_database(self):
         self.client.drop_database(self.database)
