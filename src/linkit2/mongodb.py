@@ -7,6 +7,7 @@ from pymongo.server_api import ServerApi
 from linkit2.linkit_logging.linkit_logger import get_mongodb_logger
 from linkit2.linkit_settings import MongoDBSettings
 from linkit2.models.link_record import LinkRecord, LinkRecordInMongoDB
+from linkit2.utils import now
 
 logger = get_mongodb_logger()
 
@@ -74,6 +75,34 @@ class MongoDB:
             return None
 
         return LinkRecordInMongoDB.model_validate(raw_record)
+
+    def find_active_link_record_with_slug(
+        self, slug: str
+    ) -> Optional[LinkRecordInMongoDB]:
+        raw_record = self.collection.find_one(
+            {
+                "slug": slug,
+                "expiry.expires_at": {"$gte": now()},
+                "$expr": {"$gt": ["$expiry.max_access_count", "$access.access_count"]},
+            }
+        )
+
+        if raw_record is None:
+            return None
+
+        return LinkRecordInMongoDB.model_validate(raw_record)
+
+    def process_link_record_access_with_id(self, id: str) -> None:
+        self.collection.update_one(
+            {"_id": ObjectId(id)},
+            {
+                "$set": {"access.last_accessed_at": now()},
+                "$inc": {"access.access_count": 1},
+            },
+        )
+
+    def delete_link_record_with_id(self, id: str) -> None:
+        self.collection.delete_one({"_id": ObjectId(id)})
 
     def delete_database(self):
         self.client.drop_database(self.database)

@@ -45,8 +45,8 @@ class TestMongoDB:
         assert link_record == link_record_mongodb
 
     def test_find_link_record_with_id_with_empty_db(self):
-        random_id = ObjectId()
-        link_record_mongodb = self.mongodb.find_link_record_with_id(str(random_id))
+        random_id = str(ObjectId())
+        link_record_mongodb = self.mongodb.find_link_record_with_id(random_id)
 
         assert link_record_mongodb is None
 
@@ -65,8 +65,17 @@ class TestMongoDB:
 
         assert link_record_mongodb is None
 
-    # def test_delete_link_record(self):
-    #     pass
+    def test_delete_link_record(self):
+        link_record = LinkRecordBuilder().build()
 
-    # def test_delete_link_record_with_empty_db(self):
-    #     pass
+        inserted_id = self.mongodb.insert_link_record(link_record)
+        link_record_mongodb = self.mongodb.find_link_record_with_id(inserted_id)
+        assert link_record_mongodb is not None
+
+        self.mongodb.delete_link_record_with_id(link_record_mongodb.id)
+        link_record_mongodb = self.mongodb.find_link_record_with_id(inserted_id)
+        assert link_record_mongodb is None
+
+    def test_delete_link_record_with_empty_db(self):
+        random_id = str(ObjectId())
+        self.mongodb.delete_link_record_with_id(random_id)
