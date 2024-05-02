@@ -10,6 +10,7 @@ words:
   - datefmt
   - devcontainer
   - devcontainers
+  - fastapi
   - levelname
   - linkit
   - Pranav
@@ -17,6 +18,7 @@ words:
   - pymongo
   - pystr
   - sessionstart
+  - uvicorn
 ignoreWords:
   - anson
   - autodocstring
