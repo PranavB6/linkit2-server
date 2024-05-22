@@ -106,3 +106,7 @@ class MongoDB:
 
     def delete_database(self):
         self.client.drop_database(self.database)
+
+    def close(self):
+        self.client.close()
+        logger.info("Closed MongoDB connection")
