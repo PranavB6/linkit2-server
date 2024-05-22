@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
 
 from linkit2.main import app
+from linkit2.models.link_record import LinkRecordInMongoDB
 
 client = TestClient(app)
 
@@ -23,3 +24,11 @@ class TestMain:
         response = self.client.get("/health/db")
         assert response.status_code == 200
         assert response.json() == {"db": "CONNECTED"}
+
+    def test_shorten_link(self):
+        response = self.client.post(
+            "/links", json={"original_url": "https://example.com"}
+        )
+
+        assert response.status_code == 200
+        assert LinkRecordInMongoDB.model_validate(response.json())

@@ -1,11 +1,14 @@
+import datetime
 from contextlib import asynccontextmanager
 
-from faker import Faker
 from fastapi import Depends, FastAPI
+from pydantic import BaseModel
 
 from linkit2.linkit_logging.linkit_logger import get_linkit_logger, setup_logging
 from linkit2.linkit_settings import get_linkit_settings
+from linkit2.models.link_record import LinkRecord, LinkRecordInMongoDB
 from linkit2.mongodb import MongoDB
+from linkit2.utils import generate_slug, now
 
 setup_logging()
 logger = get_linkit_logger()
@@ -48,16 +51,37 @@ async def check_health_mongodb(mongodb: MongoDB = Depends(get_mongodb)):
     return mongodb.get_health()
 
 
+class ShortenLinkRequestBody(BaseModel):
+    original_url: str
+
+
 @app.post("/links")
-async def shorten_link(mongodb: MongoDB = Depends(get_mongodb)) -> None:
-    new_slug = Faker().pystr_format(
-        string_format="?????", letters="abcdefghijklmnopqrstuvwxyz"
+async def shorten_link(
+    body: ShortenLinkRequestBody, mongodb: MongoDB = Depends(get_mongodb)
+) -> LinkRecordInMongoDB:
+    new_slug = generate_slug()
+    logger.debug(f"Generated new slug: '{new_slug}'")
+
+    new_link_record = LinkRecord.model_validate(
+        {
+            "original_url": body.original_url,
+            "slug": new_slug,
+            "created_at": now(),
+            "access": {
+                "last_accessed_at": now(),
+                "access_count": 0,
+            },
+            "expiry": {
+                "expires_at": now() + datetime.timedelta(days=7),
+                "max_access_count": 100,
+            },
+        }
     )
 
-    logger.debug(f"Generated new slug: {new_slug}")
+    inserted_id = mongodb.insert_link_record(new_link_record)
 
-    link_records = mongodb.get_all_link_records()
+    link_record_in_mongodb = mongodb.find_link_record_with_id(inserted_id)
 
-    logger.debug(link_records)
+    assert link_record_in_mongodb is not None
 
-    return
+    return link_record_in_mongodb
