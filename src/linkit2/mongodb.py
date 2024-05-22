@@ -47,6 +47,17 @@ class MongoDB:
 
         return client
 
+    def get_health(self) -> dict[str, str]:
+        try:
+            self.client.admin.command("ping")
+            return {
+                "db": "CONNECTED",
+            }
+        except Exception:
+            return {
+                "db": "NOT CONNECTED",
+            }
+
     def get_all_link_records(self) -> list[LinkRecordInMongoDB]:
         raw_records = self.collection.find({})
 
