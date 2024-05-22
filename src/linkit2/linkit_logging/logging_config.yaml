@@ -15,3 +15,7 @@ loggers:
     level: DEBUG
     handlers:
       - stdout
+  faker:
+    level: INFO
+    handlers:
+      - stdout
