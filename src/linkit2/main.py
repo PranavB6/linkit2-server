@@ -30,7 +30,7 @@ async def lifespan(app: FastAPI):
     mongodb.close()
 
 
-app = FastAPI(lifespan=lifespan, debug=True)
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/")
