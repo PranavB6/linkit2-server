@@ -85,3 +85,20 @@ async def shorten_link(
     assert link_record_in_mongodb is not None
 
     return link_record_in_mongodb
+
+
+@app.get("/links/{slug}")
+async def find_link_with_slug(
+    slug: str, mongodb: MongoDB = Depends(get_mongodb)
+) -> LinkRecordInMongoDB:
+    link_record = mongodb.find_active_link_record_with_slug(slug)
+
+    assert link_record is not None
+
+    mongodb.process_link_record_access_with_id(link_record.id)
+
+    updated_link_record = mongodb.find_link_record_with_id(link_record.id)
+
+    assert updated_link_record is not None
+
+    return updated_link_record
