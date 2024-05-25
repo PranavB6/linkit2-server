@@ -27,7 +27,8 @@ distribution = true
 
 [tool.pdm.scripts]
 _.env_file.override = ".env"
-dev = "fastapi dev 'src/linkit2/main.py'"
+start = "fastapi run 'src/linkit2/main.py' --port ${PORT}"
+dev = "fastapi dev 'src/linkit2/main.py' --port ${PORT}"
 test = { composite = ["test:unit", "test:integration"] }
 "test:unit" = "pytest -m 'not mongodb'"
 "test:integration" = "pytest -m mongodb"
