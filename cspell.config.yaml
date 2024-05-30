@@ -7,6 +7,7 @@ words:
   - asctime
   - Bodawala
   - bson
+  - buildx
   - datefmt
   - devcontainer
   - devcontainers
@@ -15,6 +16,7 @@ words:
   - levelname
   - linkit
   - Pranav
+  - pranavb
   - pydantic
   - pymongo
   - pystr
