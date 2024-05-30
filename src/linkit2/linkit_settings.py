@@ -32,7 +32,4 @@ class Settings(BaseSettings):
 
 
 def get_linkit_settings() -> Settings:
-    settings = Settings()
-
-    logger.debug("Settings: %s", settings.model_dump_json())
     return Settings()
