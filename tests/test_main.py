@@ -1,3 +1,5 @@
+from time import sleep
+
 from fastapi.testclient import TestClient
 
 from linkit2.linkit_settings import get_linkit_settings
@@ -74,6 +76,8 @@ class TestMain:
             response_shorten_link.json()
         )
 
+        sleep(1)
+
         response_get_link_with_slug = self.client.get(
             f"/links/{link_record_from_shorten.slug}"
         )
@@ -85,6 +89,10 @@ class TestMain:
         )
 
         assert link_record_from_slug.id == link_record_from_shorten.id
+        assert (
+            link_record_from_slug.access.last_accessed_at
+            > link_record_from_shorten.access.last_accessed_at
+        )
         assert (
             link_record_from_slug.access.access_count
             == link_record_from_shorten.access.access_count + 1
