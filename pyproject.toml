@@ -8,6 +8,10 @@ dependencies = [
     "pydantic>=2.6.4",
     "pymongo[srv]>=4.6.3",
     "pyyaml>=6.0.1",
+    "fastapi>=0.111.0",
+    "uvicorn[standard]>=0.29.0",
+    "httpx>=0.27.0",
+    "faker>=25.0.1",
 ]
 requires-python = ">=3.12"
 readme = "README.md"
@@ -22,8 +26,9 @@ build-backend = "pdm.backend"
 distribution = true
 
 [tool.pdm.scripts]
-_.env_file = ".env"
-dev = "python src/linkit2/main.py"
+_.env_file.override = ".env"
+start = "fastapi run 'src/linkit2/main.py' --port ${PORT}"
+dev = "fastapi dev 'src/linkit2/main.py' --port ${PORT}"
 test = { composite = ["test:unit", "test:integration"] }
 "test:unit" = "pytest -m 'not mongodb'"
 "test:integration" = "pytest -m mongodb"

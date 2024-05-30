@@ -1,83 +1,74 @@
+import datetime
 from typing import Any
 
 import pytest
-from bson import ObjectId
-from pydantic_core import ValidationError
+from pydantic import ValidationError
 
-from linkit2.models.link_record import LinkRecord, LinkRecordInMongoDB
+from linkit2.link_record_builder import LinkRecordBuilder
+from linkit2.models.link_record import LinkRecord
+from linkit2.utils import deep_merge
+
+valid_link_record_dict = {
+    "original_url": "https://www.google.com",
+    "slug": "abcde",
+    "created_at": datetime.datetime.now(),
+    "access": {
+        "last_accessed_at": datetime.datetime.now(),
+        "access_count": 1,
+    },
+    "expiry": {
+        "expires_at": datetime.datetime.now(),
+        "max_access_count": 1,
+    },
+}
 
 
 class TestLinkRecord:
     def test_create_link_record(self):
-        original_url = "https://www.google.com"
-
-        link_record = LinkRecord(original_url=original_url)
+        link_record = LinkRecord.model_validate(valid_link_record_dict)
 
         assert link_record is not None
-        assert link_record.original_url == original_url
 
-    def test_create_link_record_using_dict(self):
-        link_record_dict = {"original_url": "https://www.google.com"}
+    def test_create_link_record_with_empty_dict(self):
+        with pytest.raises(ValidationError):
+            LinkRecord.model_validate({})
 
-        link_record = LinkRecord(**link_record_dict)
+    def test_create_link_record_with_link_record_builder(self):
+        link_record = LinkRecordBuilder().build()
 
         assert link_record is not None
-        assert link_record.model_dump() == link_record_dict
 
     @pytest.mark.parametrize(
-        "link_record_dict",
+        "link_record_partial_dict",
         [
-            {},
             {"original_url": None},
             {"original_url": ""},
-            {"original_url": "   "},
+            {"created_at": None},
+            {"access": None},
+            {"access": {"last_accessed_at": None}},
+            {
+                "access": {
+                    "last_accessed_at": "invalid datetime",
+                },
+            },
+            {"access": {"access_count": None}},
+            {"access": {"access_count": "invalid int"}},
+            {"expiry": None},
+            {"expiry": {"expires_at": None}},
+            {"expiry": {"max_access_count": None}},
+            {
+                "access": None,
+                "expiry": None,
+                "original_url": None,
+                "created_at": None,
+            },
+            {"slug": None},
+            {"slug": ""},
         ],
     )
-    def test_create_link_record_using_invalid_dict(
-        self, link_record_dict: dict[str, Any]
-    ):
+    def test_invalid_link_record(self, link_record_partial_dict: dict[str, Any]):
         with pytest.raises(ValidationError):
-            LinkRecord(**link_record_dict)
-
-
-class TestLinkRecordInMongoDB:
-    def test_create_link_record_in_mongodb(self):
-        object_id = ObjectId()
-        original_url = "https://www.google.com"
-
-        link_record = LinkRecordInMongoDB(
-            _id=object_id,  # type: ignore
-            original_url=original_url,
-        )
-
-        assert link_record is not None
-        assert link_record.id == str(object_id)
-
-    def test_create_link_record_in_mongodb_using_dict(self):
-        link_record_dict = {"_id": ObjectId(), "original_url": "https://www.google.com"}
-
-        link_record = LinkRecordInMongoDB(**link_record_dict)  # type: ignore
-
-        assert link_record is not None
-
-        expected = link_record_dict.copy()
-        expected["id"] = str(expected.pop("_id"))
-        assert link_record.model_dump() == expected
-
-    @pytest.mark.parametrize(
-        "link_record_dict",
-        [
-            {},
-            {"_id": ObjectId(), "original_url": None},
-            {"_id": ObjectId(), "original_url": ""},
-            {"_id": ObjectId(), "original_url": "   "},
-            {"_id": None, "original_url": "https://www.google.com"},
-            {"_id": "", "original_url": "https://www.google.com"},
-            {"_id": "random-string", "original_url": "https://www.google.com"},
-        ],
-    )
-    def test_create_link_record_in_mongodb_using_invalid_dict(
-        self, link_record_dict: dict[str, Any]
-    ):
-        with pytest.raises(ValidationError):
-            LinkRecordInMongoDB(**link_record_dict)
+            link_record_dict = deep_merge(
+                valid_link_record_dict, link_record_partial_dict
+            )
+            LinkRecord.model_validate(link_record_dict)

@@ -7,15 +7,21 @@ words:
   - asctime
   - Bodawala
   - bson
+  - buildx
   - datefmt
   - devcontainer
   - devcontainers
+  - fastapi
+  - httpx
   - levelname
   - linkit
   - Pranav
+  - pranavb
   - pydantic
   - pymongo
+  - pystr
   - sessionstart
+  - uvicorn
 ignoreWords:
   - anson
   - autodocstring
