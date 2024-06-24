@@ -4,7 +4,7 @@ from typing import Optional, Self
 from faker import Faker
 
 from linkit2.models.link_record import LinkRecord
-from linkit2.utils import now
+from linkit2.utils import generate_random_slug, now
 
 fake = Faker()
 
@@ -24,7 +24,7 @@ class LinkRecordBuilder:
     def __init__(self):
         self.link_record_dict = {
             "original_url": fake.url(),
-            "slug": fake.pystr(min_chars=5, max_chars=10),
+            "slug": generate_random_slug(),
             "created_at": now(),
             "access": {
                 "last_accessed_at": future_datetime(),

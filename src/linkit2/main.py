@@ -8,7 +8,7 @@ from linkit2.linkit_logging.linkit_logger import get_linkit_logger, setup_loggin
 from linkit2.linkit_settings import get_linkit_settings
 from linkit2.models.link_record import LinkRecord, LinkRecordInMongoDB
 from linkit2.mongodb import MongoDB
-from linkit2.utils import generate_slug, now
+from linkit2.utils import generate_random_slug, now
 
 setup_logging()
 logger = get_linkit_logger()
@@ -59,7 +59,7 @@ class ShortenLinkRequestBody(BaseModel):
 async def shorten_link(
     body: ShortenLinkRequestBody, mongodb: MongoDB = Depends(get_mongodb)
 ) -> LinkRecordInMongoDB:
-    new_slug = generate_slug()
+    new_slug = generate_random_slug()
     logger.debug(f"Generated new slug: '{new_slug}'")
 
     new_link_record = LinkRecord.model_validate(
