@@ -102,3 +102,14 @@ async def find_link_with_slug(
     assert updated_link_record is not None
 
     return updated_link_record
+
+
+@app.get("/statistics/links/{link_id}")
+async def find_link_with_id(
+    link_id: str, mongodb: MongoDB = Depends(get_mongodb)
+) -> LinkRecordInMongoDB:
+    link_record = mongodb.find_link_record_with_id(link_id)
+
+    assert link_record is not None
+
+    return link_record

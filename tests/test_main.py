@@ -97,3 +97,26 @@ class TestMain:
             link_record_from_slug.access.access_count
             == link_record_from_shorten.access.access_count + 1
         )
+
+    def test_find_link_with_id(self):
+        original_url = "https://example.com"
+
+        response_shorten_link = self.client.post(
+            "/links", json={"original_url": original_url}
+        )
+        link_record_from_shorten = LinkRecordInMongoDB.model_validate(
+            response_shorten_link.json()
+        )
+
+        response_get_link_with_id = self.client.get(
+            f"/statistics/links/{link_record_from_shorten.id}"
+        )
+
+        assert response_get_link_with_id.status_code == 200
+
+        link_record_from_id = LinkRecordInMongoDB.model_validate(
+            response_get_link_with_id.json()
+        )
+
+        assert link_record_from_id.id == link_record_from_shorten.id
+        assert link_record_from_id.original_url == original_url
