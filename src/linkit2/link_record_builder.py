@@ -39,6 +39,11 @@ class LinkRecordBuilder:
     def __repr__(self):
         return f"LinkRecordBuilder({self.link_record_dict})"
 
+    def with_slug(self, slug: str) -> Self:
+        self.link_record_dict["slug"] = slug
+
+        return self
+
     def with_access(
         self,
         last_accessed_at: Optional[datetime.datetime] = None,

@@ -113,3 +113,16 @@ async def find_link_with_id(
     assert link_record is not None
 
     return link_record
+
+
+class GetAvailableSlugResponseBody(BaseModel):
+    slug: str
+
+
+@app.get("/slug")
+async def get_available_slug(
+    mongodb: MongoDB = Depends(get_mongodb),
+) -> GetAvailableSlugResponseBody:
+    available_slug = mongodb.get_available_slug()
+
+    return GetAvailableSlugResponseBody.model_validate({"slug": available_slug})
