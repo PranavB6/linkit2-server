@@ -1,7 +1,7 @@
 from linkit2.utils import generate_random_slug
 
 
-class TestGenerateSlugUtil:
+class TestGenerateRandomSlugUtil:
     def test_basic(self):
         slug = generate_random_slug()
 
