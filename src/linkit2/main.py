@@ -8,6 +8,7 @@ from linkit2.linkit_logging.linkit_logger import get_linkit_logger, setup_loggin
 from linkit2.linkit_settings import get_linkit_settings
 from linkit2.models.link_record import LinkRecord, LinkRecordInMongoDB
 from linkit2.mongodb import MongoDB
+from linkit2.routers import health
 from linkit2.utils import generate_random_slug, now
 
 setup_logging()
@@ -41,14 +42,7 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/health/live")
-async def check_health_live():
-    return {"status": "LIVE"}
-
-
-@app.get("/health/db")
-async def check_health_mongodb(mongodb: MongoDB = Depends(get_mongodb)):
-    return mongodb.get_health()
+app.include_router(health.router)
 
 
 class ShortenLinkRequestBody(BaseModel):
