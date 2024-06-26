@@ -1,6 +1,6 @@
 import datetime
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from linkit2.dependencies import get_mongodb
@@ -58,7 +58,12 @@ async def find_link_with_slug(
 ) -> LinkRecordInMongoDB:
     link_record = mongodb.find_active_link_record_with_slug(slug)
 
-    assert link_record is not None
+    if link_record is None:
+        logger.debug(f"Could not find link record with slug: '{slug}'")
+
+        raise HTTPException(
+            status_code=404, detail=f"Could not find link with slug: '{slug}'"
+        )
 
     mongodb.process_link_record_access_with_id(link_record.id)
 

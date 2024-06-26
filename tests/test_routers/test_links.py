@@ -51,6 +51,10 @@ class TestLinksRouter:
         assert link_record_from_slug.id == link_record_from_shorten.id
         assert link_record_from_slug.original_url == original_url
 
+    def test_searching_for_non_existing_slug_returns_404(self):
+        response = self.client.get("/links/invalid-slug")
+        assert response.status_code == 404
+
     def test_find_link_with_slug_updates_access(self):
         original_url = "https://example.com"
 
