@@ -7,14 +7,16 @@ from linkit2.mongodb import MongoDB
 
 logger = get_linkit_logger()
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/slug",
+)
 
 
 class GetAvailableSlugResponseBody(BaseModel):
     slug: str
 
 
-@router.get("/slug")
+@router.get("/")
 async def get_available_slug(
     mongodb: MongoDB = Depends(get_mongodb),
 ) -> GetAvailableSlugResponseBody:

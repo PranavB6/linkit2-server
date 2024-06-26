@@ -11,14 +11,16 @@ from linkit2.utils import generate_random_slug, now
 
 logger = get_linkit_logger()
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/links",
+)
 
 
 class ShortenLinkRequestBody(BaseModel):
     original_url: str
 
 
-@router.post("/links")
+@router.post("/")
 async def shorten_link(
     body: ShortenLinkRequestBody, mongodb: MongoDB = Depends(get_mongodb)
 ) -> LinkRecordInMongoDB:
@@ -50,7 +52,7 @@ async def shorten_link(
     return link_record_in_mongodb
 
 
-@router.get("/links/{slug}")
+@router.get("/{slug}")
 async def find_link_with_slug(
     slug: str, mongodb: MongoDB = Depends(get_mongodb)
 ) -> LinkRecordInMongoDB:

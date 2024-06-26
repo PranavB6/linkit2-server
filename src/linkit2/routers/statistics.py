@@ -7,10 +7,12 @@ from linkit2.mongodb import MongoDB
 
 logger = get_linkit_logger()
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/statistics",
+)
 
 
-@router.get("/statistics/links/{link_id}")
+@router.get("/links/{link_id}")
 async def find_link_with_id(
     link_id: str, mongodb: MongoDB = Depends(get_mongodb)
 ) -> LinkRecordInMongoDB:
