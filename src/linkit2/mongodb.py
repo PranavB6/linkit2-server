@@ -7,7 +7,7 @@ from pymongo.server_api import ServerApi
 from linkit2.linkit_logging.linkit_logger import get_mongodb_logger
 from linkit2.linkit_settings import MongoDBSettings
 from linkit2.models.link_record import LinkRecord, LinkRecordInMongoDB
-from linkit2.utils import now
+from linkit2.utils import generate_random_slug, now
 
 logger = get_mongodb_logger()
 
@@ -111,6 +111,14 @@ class MongoDB:
                 "$inc": {"access.access_count": 1},
             },
         )
+
+    def get_available_slug(self) -> str:
+        random_slug = generate_random_slug()
+
+        while self.find_active_link_record_with_slug(random_slug) is not None:
+            random_slug = generate_random_slug()
+
+        return random_slug
 
     def delete_link_record_with_id(self, id: str) -> None:
         self.collection.delete_one({"_id": ObjectId(id)})

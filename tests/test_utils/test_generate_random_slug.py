@@ -1,9 +1,9 @@
-from linkit2.utils import generate_slug
+from linkit2.utils import generate_random_slug
 
 
-class TestGenerateSlugUtil:
+class TestGenerateRandomSlugUtil:
     def test_basic(self):
-        slug = generate_slug()
+        slug = generate_random_slug()
 
         assert len(slug) == 5
         assert slug.islower()

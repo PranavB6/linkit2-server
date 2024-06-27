@@ -18,6 +18,8 @@ def pytest_sessionstart(session: pytest.Session):
 
     settings = get_linkit_settings()
 
+    logger.debug("Settings: %s", settings.model_dump_json())
+
     assert settings.environment == LinkitEnvironment.TEST
     assert settings.mongodb.database_name == "test_database"
 
