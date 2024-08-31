@@ -1,6 +1,7 @@
 from typing import Any, Optional
 
 from bson import CodecOptions, ObjectId
+from bson.raw_bson import RawBSONDocument
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
@@ -28,7 +29,7 @@ class MongoDB:
         self.database = self.client.get_database(self.mongodb_settings.database_name)
         self.collection = self.database.get_collection(
             self.mongodb_settings.collection_name,
-            codec_options=CodecOptions(tz_aware=True),
+            codec_options=CodecOptions(document_class=RawBSONDocument, tz_aware=True),
         )
 
     def _connect(self):
@@ -102,6 +103,26 @@ class MongoDB:
             return None
 
         return LinkRecordInMongoDB.model_validate(raw_record)
+
+    def find_expired_link_records(self) -> list[LinkRecordInMongoDB]:
+        raw_records = self.collection.find(
+            {
+                "$or": [
+                    {
+                        "$expr": {
+                            "$gt": ["$access.access_count", "$expiry.max_access_count"]
+                        }
+                    },
+                    {
+                        "expiry.expires_at": {"$lt": now()},
+                    },
+                ]
+            }
+        )
+
+        return [
+            LinkRecordInMongoDB.model_validate(raw_record) for raw_record in raw_records
+        ]
 
     def process_link_record_access_with_id(self, id: str) -> None:
         self.collection.update_one(
